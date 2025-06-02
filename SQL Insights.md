@@ -50,5 +50,18 @@ SELECT * FROM Orders LIMIT 5 OFFSET 10;
 
 - This **skips the first 10 rows** and then returns the **next 5 rows**
 
+#### Date
+- To add a day to column of type *date* use -
+```mysql
+DATE_ADD(date_col, INTERVAL 1 DAY)
+```
+- If suppose a column has type date, and I need to extract just year and month from it then I can use this - 
+```mysql
+date_format(trans_date, "%Y-%m") as month
+```
 
+#### Miscellaneous
+- Aggregate functions like `count` are used in `having` clause instead of `where`. This is because `where` filters the rows before aggregation and therefore any aggregate function is meaningless, while `having` filters rows after aggregation.
+- Count only counts the number of rows, it doesn't evaluate a boolean expression i.e count will take both true and false as 1 hence count(c.action = 'confirmed') ends up counting all the rows where c.action is not null. Instead we have used sum(c.action = 'confirmed'), sum considers true as 1 and false as 0. [1934. Confirmation Rate](https://leetcode.com/problems/confirmation-rate/)
+- The above three queries are slower not because they are using **derived tables** or **Common Table Expression(CTE)** but they are slower due to the existence of correlated sub queries which cause a time complexity of O(N^2) while the below query uses Window Function and no correlation exists between subquery and parent query. Partition by is similar to group by but it does not collapse the related rows. Row Number() assigns a number to each row within a partition. [1174. Immediate Food Delivery II](https://leetcode.com/problems/immediate-food-delivery-ii/)
 
