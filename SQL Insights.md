@@ -60,8 +60,14 @@ DATE_ADD(date_col, INTERVAL 1 DAY)
 date_format(trans_date, "%Y-%m") as month
 ```
 
+
+#### Having Clause
+- You can't use non aggregated column in having clause because `having` clause executes after group by has been applied and therefore individual columns don't exist.
+- However you can use a non aggregated column inside an aggregating function like `sum()`, `max()`, `count()`, etc
+
 #### Miscellaneous
 - Aggregate functions like `count` are used in `having` clause instead of `where`. This is because `where` filters the rows before aggregation and therefore any aggregate function is meaningless, while `having` filters rows after aggregation.
 - Count only counts the number of rows, it doesn't evaluate a boolean expression i.e count will take both true and false as 1 hence count(c.action = 'confirmed') ends up counting all the rows where c.action is not null. Instead we have used sum(c.action = 'confirmed'), sum considers true as 1 and false as 0. [1934. Confirmation Rate](https://leetcode.com/problems/confirmation-rate/)
 - The above three queries are slower not because they are using **derived tables** or **Common Table Expression(CTE)** but they are slower due to the existence of correlated sub queries which cause a time complexity of O(N^2) while the below query uses Window Function and no correlation exists between subquery and parent query. Partition by is similar to group by but it does not collapse the related rows. Row Number() assigns a number to each row within a partition. [1174. Immediate Food Delivery II](https://leetcode.com/problems/immediate-food-delivery-ii/)
-
+- Aggregate functions like `max()` return `null` if given an empty input.
+- 
